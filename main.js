@@ -1,17 +1,19 @@
-const fs = require('fs').promises;
+const axios = require('axios');
 
-async function main() {
-  try {
-    // lee el documento de input.txt
-    const inputContent = await fs.readFile('input.txt', 'utf-8');
-    console.log('Contenido de input.txt', inputContent);
+const apiUrl = 'https://api.thedogapi.com/v1/breeds'
 
-    // Escreibe el contenido en el archivo output.txt
-    await fs.writeFile('output.txt', inputContent);
-    console.log('Contenido copiado a output.txt');
-  } catch (error) {
-    console.error('Error', error.message)
-  }
-}
-//Ejecuta la funcion principal
-main()
+axios.get(apiUrl)
+  .then(response => {
+    // Maneja la respuesta de la API
+    // console.log(response)
+    const breeds = response.data
+    //Ejemplo filtrar las razas de tamaño medio
+    
+    const mediumBreeds = breeds.filter(breed => breed.breed_group === 'Toy')
+    console.log('Razas de tamaño mediano:', mediumBreeds);
+  })
+  .catch(error => {
+    console.error('Error al realizar la solicitud a la API:', error.message);
+  });
+
+
